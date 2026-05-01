@@ -1,101 +1,99 @@
 # SafeVaultApp
 
-SafeVaultApp is an ASP.NET Core project that demonstrates **authentication and authorization** using **ASP.NET Core Identity** and **JWT (JSON Web Tokens)**.  
-It includes user registration, login, role assignment, and secure endpoint access.
+**SafeVaultApp** is an [ASP.NET Core](https://microsoft.com) project that demonstrates authentication and authorization workflows using **ASP.NET Core Identity** and [JWT (JSON Web Tokens)](https://jwt.io).
 
----
+The application includes user registration, login, role assignment, and secure endpoint access.
 
-## 🚀 Features
+## Features
 
-- User registration with roles
-- Login with JWT token issuance
-- Role-based authorization
-- Logging of login and registration events
-- Configurable database connection via `appsettings.json`
+*   **User Registration:** Supports assigning specific roles during sign-up.
+*   **JWT Authentication:** Issues secure tokens upon successful login.
+*   **Role-Based Authorization:** Restricts access to endpoints based on user roles.
+*   **Event Logging:** Tracks registration and login activities.
+*   **Configurable Database:** Easily adjust connection settings via `appsettings.json`.
 
----
-
-## 🛠️ Build & Run
+## Build & Run
 
 ### Prerequisites
 
-- [.NET 9 SDK](https://dotnet.microsoft.com/download)
-- SQL Server (local or remote)
-- Git
+*   [.NET 9 SDK](https://microsoft.com)
+*   SQL Server (Local or Remote)
+*   [Git](https://git-scm.com)
 
-### Steps
+### Steps to Run
 
-**Restore dependencies:**
+1.  **Restore dependencies:**
+    ```bash
+    dotnet restore
+    ```
 
-```bash
-dotnet restore
-Apply migrations and create the database:
+2.  **Apply migrations:**
+    Update the database schema using [Entity Framework Core](https://microsoft.com):
+    ```bash
+    dotnet ef database update
+    ```
 
-bash
-dotnet ef database update
-Run the application:
+3.  **Run the application:**
+    ```bash
+    dotnet run
+    ```
+    The API will be available at: `https://localhost:5001` (or the port specified in `launchSettings.json`).
 
-bash
-dotnet run
-The API will be available at https://localhost:5001 (or the port configured in launchSettings.json).
+## Testing
 
-🧪 Testing
-You can test endpoints using Postman or curl.
+You can test the API endpoints using [Postman](https://postman.com) or `curl`.
 
-Register
-bash
-POST https://localhost:5001/api/account/register
-Content-Type: application/json
+### 1. Register
+**POST** `/api/account/register`
 
+```json
 {
   "username": "alice",
   "email": "alice@example.com",
   "password": "StrongPassword123!",
   "role": "Admin"
 }
-Login
-bash
-POST https://localhost:5001/api/account/login
-Content-Type: application/json
+```
 
+### 2. Login
+**POST** `/api/account/login`
+
+```json
 {
   "username": "alice",
   "password": "StrongPassword123!"
 }
-Response:
+```
 
-json
+**Response Example:**
+```json
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR..."
 }
-Use this token in the Authorization: Bearer <token> header to access protected endpoints.
+```
+*Include this token in the `Authorization: Bearer <token>` header to access protected resources.*
 
-⚠️ Troubleshooting
-Error: Could not open a connection to SQL Server
-If you see errors like:
+## Troubleshooting
 
-Code
-A network-related or instance-specific error occurred while establishing a connection to SQL Server.
-Check your database configuration in appsettings.json:
+**Error:** *Could not open a connection to SQL Server*
 
-json
+Check your connection string in the `appsettings.json` file:
+
+```json
 "ConnectionStrings": {
   "DefaultConnection": "Server=localhost\\SQLEXPRESS;Database=SafeVaultDb;Trusted_Connection=True;MultipleActiveResultSets=true"
 }
-Ensure SQL Server is running.
-
-Verify the instance name (localhost vs localhost\\SQLEXPRESS).
-
-Confirm the database exists (run dotnet ef database update).
-
-Adjust credentials if using SQL Authentication.
-
-📌 Notes`
-Default branch is main.
-
-Logs are written to console by default; configure logging providers in Program.cs as needed.
-
-For production, secure your JWT key in environment variables or a secrets manager.`
-
-Use [Authorize(Roles="Admin")] or [Authorize] attributes to protect endpoints.
 ```
+
+**Verification Checklist:**
+*   Ensure the SQL Server service is running.
+*   Verify the instance name (e.g., `localhost` vs `localhost\SQLEXPRESS`).
+*   Confirm the database has been created (run `dotnet ef database update`).
+*   Adjust credentials if using SQL Authentication instead of Windows Authentication.
+
+## Notes
+
+*   **Default Branch:** `main`
+*   **Logging:** Logs are written to the console by default; configure providers in `Program.cs`.
+*   **Production Security:** Store your JWT secret keys in [Environment Variables](https://microsoft.com) or a Secret Manager.
+*   **Attributes:** Use `[Authorize(Roles="Admin")]` or `[Authorize]` to protect your Controllers and Actions.
